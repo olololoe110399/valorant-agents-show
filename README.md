@@ -2,12 +2,7 @@
 
 Welcome to **Valorant Agents Show**, a Flutter app that showcases various agents from the game Valorant. This app fetches agent data from an API and presents it in an interactive and visually appealing manner.
 
-<!-- ![App Demo](demo.gif)  -->
-
-<!-- ![](demo.mp4) -->
-<video width="540" height="960" controls>
-  <source src="demo.mp4" type="video/mp4">
-</video>
+[demo.webm](https://github.com/olololoe110399/valorant-agents-show/assets/58255731/2b8b118c-319e-4ed3-81f9-477034857f0a)
 
 
 ## Table of Contents
