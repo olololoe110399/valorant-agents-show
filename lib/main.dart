@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:valorant_agents_show/theme/app_theme.dart';
-import 'package:valorant_agents_show/ui/agents/agent_list_screen.dart';
+import 'package:valorant_agents_show/shared/theme/app_theme.dart';
+import 'package:valorant_agents_show/presentation/screens/agents/agent_list_screen.dart';
 
 void main() {
   runApp(

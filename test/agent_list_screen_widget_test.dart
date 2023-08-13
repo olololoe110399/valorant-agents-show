@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:valorant_agents_show/ui/agents/agent_list_screen.dart';
-import 'package:valorant_agents_show/ui/agents/agent_list_state.dart';
-import 'package:valorant_agents_show/utils/app_exception.dart';
+import 'package:valorant_agents_show/presentation/screens/agents/agent_list_screen.dart';
+import 'package:valorant_agents_show/presentation/screens/agents/agent_list_state.dart';
+import 'package:valorant_agents_show/shared/app_exception.dart';
 
 void main() {
   group('Agent List Screen Widget Tests', () {

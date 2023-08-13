@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:valorant_agents_show/model/agent.dart';
+import 'package:valorant_agents_show/domain/model/agent.dart';
 
-import 'package:valorant_agents_show/model/base_response.dart';
+import 'package:valorant_agents_show/domain/model/base_response.dart';
 
 part 'agents_api_services.g.dart';
 

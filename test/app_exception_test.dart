@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:valorant_agents_show/utils/app_exception.dart';
+import 'package:valorant_agents_show/shared/app_exception.dart';
 
 void main() {
   group('AppException Tests', () {
