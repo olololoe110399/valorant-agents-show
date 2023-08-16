@@ -96,17 +96,19 @@ class AgentListView extends HookWidget {
           items: agents,
           page: currentAgentViewer,
         ),
-        AgentsPicker(
-          listState: pageController,
-          items: agents,
-          page: currentPage,
+        SafeArea(
+          child: AgentsPicker(
+            listState: pageController,
+            items: agents,
+            page: currentPage,
+          ),
         ),
       ],
     );
   }
 }
 
-class AgentPager extends HookWidget {
+class AgentPager extends StatelessWidget {
   final PageController listState;
   final List<Agent> items;
   final ValueNotifier<double> page;
@@ -182,27 +184,29 @@ class AgentPager extends HookWidget {
                 ),
               ),
             ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              margin: const EdgeInsets.only(top: 50),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: AnimatedOpacity(
-                  opacity: textAlpha,
-                  duration: const Duration(milliseconds: 200),
-                  child: AnimatedDefaultTextStyle(
+            SafeArea(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.only(top: 50),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: AnimatedOpacity(
+                    opacity: textAlpha,
                     duration: const Duration(milliseconds: 200),
-                    style: TextStyle(
-                      fontSize: textSize,
-                    ),
-                    child: Text(
-                      agent.displayName?.toUpperCase() ?? '',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: "valorant",
-                        fontWeight: FontWeight.bold,
+                    child: AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 200),
+                      style: TextStyle(
+                        fontSize: textSize,
                       ),
-                      textAlign: TextAlign.center,
+                      child: Text(
+                        agent.displayName?.toUpperCase() ?? '',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: "valorant",
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
@@ -229,7 +233,7 @@ class AgentPager extends HookWidget {
   }
 }
 
-class AgentsPicker extends HookWidget {
+class AgentsPicker extends StatelessWidget {
   final PageController listState;
   final List<Agent> items;
   final ValueNotifier<double> page;
