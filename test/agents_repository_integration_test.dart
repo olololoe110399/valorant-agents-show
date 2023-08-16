@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:valorant_agents_show/data/agents_repository_ipml.dart';
 import 'package:valorant_agents_show/data/remote/agents_api_services.dart';
-import 'package:valorant_agents_show/model/agent.dart';
-import 'package:valorant_agents_show/model/base_response.dart';
+import 'package:valorant_agents_show/domain/model/agent.dart';
+import 'package:valorant_agents_show/domain/model/base_response.dart';
 import 'package:valorant_agents_show/shared/app_exception.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dio/dio.dart';
