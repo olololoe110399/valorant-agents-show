@@ -9,14 +9,17 @@ class AgentListScreenViewModel extends StateNotifier<AgentListState> {
     required this.repository,
   }) : super(const AgentListState.initial());
 
-  Future<void> getAllAgents() async {
+  void getAllAgents() {
     state = const AgentListState.loading();
 
-    final response = await repository.getAllAgents();
-
-    state = await response.fold(
-      (failure) => AgentListState.failure(failure),
-      (agents) => AgentListState.success(agents),
-    );
+    repository
+        .getAllAgents()
+        .then(
+          (response) => response.fold(
+            (failure) => AgentListState.failure(failure),
+            (agents) => AgentListState.success(agents),
+          ),
+        )
+        .then((value) => state = value);
   }
 }

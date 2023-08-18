@@ -40,10 +40,10 @@ class AgentListView extends HookWidget {
   Widget build(BuildContext context) {
     final pageController = usePageController(
       initialPage: agents.length ~/ 2,
-      viewportFraction: 1 / 3,
     );
     final agentViewerController = usePageController(
       initialPage: agents.length ~/ 2,
+      viewportFraction: 1 / 3,
     );
 
     final currentPage = useState(
@@ -53,26 +53,11 @@ class AgentListView extends HookWidget {
     final currentAgentViewer = useState(
       (agents.length ~/ 2).toDouble(),
     );
+    final isClicking = useState(false);
 
     useEffect(() {
-      void callback() async {
-        final page = pageController.page?.toDouble() ?? 0.0;
-        if (page.toInt() != currentAgentViewer.value.toInt()) {
-          await agentViewerController.animateToPage(
-            page.toInt(),
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.linear,
-          );
-        }
-        currentPage.value = page;
-      }
-
-      pageController.addListener(callback);
-      return () => pageController.removeListener(callback);
-    }, []);
-
-    useEffect(() {
-      void callback() async {
+      void currentAgentViewerCallback() async {
+        if (isClicking.value) return;
         final page = agentViewerController.page?.toDouble() ?? 0.0;
         if (page.toInt() != currentPage.value.toInt()) {
           await pageController.animateToPage(
@@ -84,23 +69,51 @@ class AgentListView extends HookWidget {
         currentAgentViewer.value = page;
       }
 
-      agentViewerController.addListener(callback);
-      return () => agentViewerController.removeListener(callback);
+      void pageCallback() async {
+        final page = pageController.page?.toDouble() ?? 0.0;
+        if (page.toInt() != currentAgentViewer.value.toInt()) {
+          await agentViewerController.animateToPage(
+            page.toInt(),
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.linear,
+          );
+        }
+        currentPage.value = page;
+      }
+
+      agentViewerController.addListener(currentAgentViewerCallback);
+      pageController.addListener(pageCallback);
+      return () {
+        pageController.removeListener(pageCallback);
+        agentViewerController.removeListener(currentAgentViewerCallback);
+      };
     }, []);
 
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         AgentPager(
-          listState: agentViewerController,
+          listState: pageController,
           items: agents,
-          page: currentAgentViewer,
+          page: currentPage,
         ),
         SafeArea(
           child: AgentsPicker(
-            listState: pageController,
+            listState: agentViewerController,
             items: agents,
-            page: currentPage,
+            page: currentAgentViewer,
+            onTap: (index) async {
+              isClicking.value = true;
+              if (index.toInt() != currentPage.value.toInt()) {
+                await pageController.animateToPage(
+                  index.toInt(),
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.linear,
+                );
+              }
+              currentAgentViewer.value = index.toDouble();
+              isClicking.value = false;
+            },
           ),
         ),
       ],
@@ -133,7 +146,7 @@ class AgentPager extends StatelessWidget {
       itemBuilder: (context, index) {
         final agentIndex = index % items.length;
         final agent = items[agentIndex];
-        final pageOffset = page.value - index;
+        final pageOffset = (page.value - index).abs();
         final boxSize = pageOffset != 0.0 ? 0.9 : 1.0;
         final yOffset = pageOffset != 0.0 ? -100.0 : 0.0;
         final textAlpha = pageOffset != 0.0 ? 0.0 : 1.0;
@@ -233,16 +246,22 @@ class AgentPager extends StatelessWidget {
   }
 }
 
+extension NumExtensions on num {
+  bool get isInt => (this % 1) == 0;
+}
+
 class AgentsPicker extends StatelessWidget {
   final PageController listState;
   final List<Agent> items;
   final ValueNotifier<double> page;
+  final void Function(int)? onTap;
 
   const AgentsPicker({
     Key? key,
     required this.listState,
     required this.items,
     required this.page,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -257,7 +276,7 @@ class AgentsPicker extends StatelessWidget {
         controller: listState,
         itemCount: items.length,
         itemBuilder: (context, index) {
-          final pageOffset = page.value - index;
+          final pageOffset = (page.value - index).abs();
           final sizeInside = pageOffset == 0 ? 80.0 : 50.0;
           final borderColor = pageOffset == 0
               ? Theme.of(context).colorScheme.primary.withAlpha(204)
@@ -269,15 +288,13 @@ class AgentsPicker extends StatelessWidget {
           return AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             padding: EdgeInsets.symmetric(horizontal: itemWidth * 0.2),
-            margin: EdgeInsets.all(pageOffset == 0 ? 0.0 : 8.0),
+            margin: EdgeInsets.all(pageOffset.isInt
+                ? pageOffset == 0
+                    ? 0.0
+                    : 8.0
+                : 8.0),
             child: GestureDetector(
-              onTap: () {
-                listState.animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.linear,
-                );
-              },
+              onTap: () => onTap?.call(index),
               child: Container(
                 width: sizeInside,
                 height: sizeInside,
