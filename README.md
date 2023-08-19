@@ -54,6 +54,8 @@ Welcome to **Valorant Agents Show**, a Flutter app that showcases various agents
 │   │   │   └── presentation_module.dart
 │   │   └── screens
 │   │       └── agents
+│   │           ├── agent_list_event.dart
+│   │           ├── agent_list_event.freezed.dart
 │   │           ├── agent_list_screen.dart
 │   │           ├── agent_list_state.dart
 │   │           ├── agent_list_state.freezed.dart

@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/release
 
 .fake
+
+*.freezed.dart
+*.g.dart

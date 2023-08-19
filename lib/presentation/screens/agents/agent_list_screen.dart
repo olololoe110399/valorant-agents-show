@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 
 import 'package:valorant_agents_show/domain/model/agent.dart';
 import 'package:valorant_agents_show/presentation/di/presentation_module.dart';
+import 'package:valorant_agents_show/presentation/screens/agents/agent_list_event.dart';
 
 class AgentListScreen extends HookConsumerWidget {
   const AgentListScreen({Key? key}) : super(key: key);
@@ -15,7 +16,9 @@ class AgentListScreen extends HookConsumerWidget {
 
     useEffect(() {
       Future.microtask(
-        () => ref.read(agentListViewModelProvider.notifier).getAllAgents(),
+        () => ref
+            .read(agentListViewModelProvider.notifier)
+            .addEvent(const AgentListScreenInitiated()),
       );
       return null;
     }, []);
